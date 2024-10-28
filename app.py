@@ -27,7 +27,7 @@ st.title("Iskobot")
 st.write("---")
 
 # Load PDF and prepare documents for retrieval
-pdf_loader = PyPDFLoader("../pdfs/Studying-101.pdf")
+pdf_loader = PyPDFLoader("../pdfs/1706.03762v7.pdf")
 pages = pdf_loader.load_and_split()
 
 # Split the PDF content into smaller chunks for processing
