@@ -1,9 +1,9 @@
 import os
 import streamlit as st
 from groq import Groq
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 from dotenv import load_dotenv
 
@@ -27,7 +27,7 @@ st.title("Iskobot")
 st.write("---")
 
 # Load PDF and prepare documents for retrieval
-pdf_loader = PyPDFLoader("../pdfs/1706.03762v7.pdf")
+pdf_loader = PyPDFLoader("./pdfs/1706.03762v7.pdf")
 pages = pdf_loader.load_and_split()
 
 # Split the PDF content into smaller chunks for processing
