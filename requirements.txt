@@ -1,0 +1,13 @@
+streamlit
+langchain
+pandas
+PyPDF2
+pdfplumber
+chromadb
+jinja2
+pydantic
+langchain-community
+langchain_ollama
+groq
+python-dotenv
+pypdf
