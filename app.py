@@ -4,12 +4,12 @@ from groq import Groq
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_ollama import OllamaEmbeddings
+from langchain_community.embeddings import JinaEmbeddings
 from dotenv import load_dotenv
-
 import chromadb
-chroma_client = chromadb.Client()
 
+# Initialize a client for ChromaDB
+chroma_client = chromadb.Client()
 
 # Access the API key from environment variables
 load_dotenv()  # Load environment variables from .env file
@@ -17,6 +17,11 @@ api_key = os.getenv("GROQ_API_KEY")
 
 if not api_key:
     raise ValueError("API key for Groq is not set. Please check your .env file or environment variables.")
+
+jina_api_key = os.getenv("JINA_API_KEY")
+
+if not jina_api_key:
+    raise ValueError("API key for jina is not set. Please check your .env file or environment variables.")
 
 # Initialize the Groq client with the API key
 client = Groq(api_key=api_key)
@@ -35,11 +40,11 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1
 context = "\n\n".join(str(p.page_content) for p in pages)
 texts = text_splitter.split_text(context)
 
-# Generate embeddings and create a vector store for retrieval
-embeddings = OllamaEmbeddings(model='jina/jina-embeddings-v2-base-en')  # Specify embedding model here
+# Generate embeddings and 
+text_embeddings = JinaEmbeddings(jina_api_key=jina_api_key, model_name="jina-embeddings-v2-base-en")
 
-# Chroma in In-Memory Mode via persist_directory=None
-vector_index = Chroma.from_texts(texts, embeddings, persist_directory=None).as_retriever(search_kwargs={"k": 2})
+# Create a vector store for retrieval
+vector_index = Chroma.from_texts(texts, text_embeddings, persist_directory=None).as_retriever(search_kwargs={"k": 2}) # Chroma in In-Memory Mode via persist_directory=None
 
 # Initialize session state for chat history if not already done
 if 'chat_history' not in st.session_state:
